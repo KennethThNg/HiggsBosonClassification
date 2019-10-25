@@ -13,10 +13,15 @@ The content of this project is composed of different parts:
 - The folder ``ML2019Project1`` containing the ``.py``files:
    - __``preprocess.py``__: contains methods for preprocessing the data.
          -``standardize``: standardizes the data.
+         
          -``fit_standardize``: standardizes the data based on *given* mean and standard deviation. 
+         
          -``remove_constant_col``: removes the data features with *zero* standard deviation.
+         
          -``fit_remove_constant_col``: removes data features based on *given* features.
+         
          -``get_categorical_masks``: returns four masks corresponding to the categorical values 0,1,2 and 3 respectively.
+         
          -``replaceNaNsWithMedian``: replaces the *-999.0* values with the median of the corresponding feature.
          
    - __``proj_helpers.py``__: predefined help functions for the project.
