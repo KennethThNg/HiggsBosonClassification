@@ -3,4 +3,9 @@ This project for the Machine Learning course is about predicting from a data set
 
 The content of this project is composed of different parts:
 - The folder ``data`` contains the data for the project. It is composed of three files:
-   - ``train.csv``
+   - ``train.csv``: data set used for training the model.
+   - ``test.csv``: data set used to make prediction from the model.
+   - ``sample-submission.csv``: format in which the predictions are presented.
+   
+- The ``.py``files:
+   
