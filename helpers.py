@@ -1,5 +1,6 @@
 import numpy as np
 from proj_helpers import predict_labels
+import matplotlib.pyplot as plt
 
 def compute_loss(y, tx, w):
     e = y - tx.dot(w)
@@ -57,3 +58,44 @@ def compute_logistic_loss(y, tx, w, lambda_=0):
     loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_+np.squeeze(w.T.dot(w))
     return loss
 
+# Find best model parameter
+def find_best_parameters(grid_results, min_ = False, item = 'acc_mean'):
+    max = -10000
+    min = 10000
+    index = -1
+    for i, res in enumerate(grid_results):
+        feature = res[item]
+        if min_ and feature < min:
+            min = feature
+            index = i
+        elif not min_ and feature > max:
+            max = feature
+            index = i
+    if min_:
+        return min, index
+    else:
+        return max, index
+    
+# visualized dependence of accuracy on lambda
+def accuracy_visualization_1(lambds, acc, param1='param1', title='Accuracy Plot'):
+    """visualization the curves of mse_tr and mse_te."""
+    plt.figure()
+    plt.semilogx(lambds, acc, marker=".", color='b', label='train error')
+    plt.xlabel(str(param1))
+    plt.ylabel("acc")
+    plt.title(str(title))
+    plt.grid(True)
+    plt.savefig(str(title) + '.png')
+    plt.show()
+    
+# visualized the matrice 'accs' on a grid made from vectors 'param1' and 'param2'
+def accuracy_visualization_2(param1, param2, accs, name1='param1', name2='param2', title='Accuracy Visualization'):
+    X, Y = np.meshgrid(param1, param2, sparse=True)
+    fig, ax = plt.subplots( nrows=1, ncols=1 )
+    c = ax.pcolor(X, Y, accs, cmap='RdBu', vmin=np.min(accs), vmax=np.max(accs))
+    ax.set_title(str(title))
+    ax.set_xlabel(str(name1))
+    ax.set_ylabel(str(name2))
+    fig.colorbar(c, ax=ax)
+    fig.savefig(str(title) + '.png')
+    plt.show()

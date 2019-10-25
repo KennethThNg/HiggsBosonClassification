@@ -15,21 +15,20 @@ def build_k_indices(y, k_fold, seed=1):
 
 
 def cross_validation(ytrain, xtrain, ytest, xtest, initial_w, max_iter, gamma, lambda_, model='ridge_regression'):
-
-    if model == 'least_square_GD':
+    if model == 'gd':
         w, loss = least_square_GD(ytrain, xtrain, initial_w, max_iter, gamma)
-    elif model == 'least_square_SGD':
+    elif model == 'sgd':
         w, loss = least_square_SGD(ytrain, xtrain, initial_w, max_iter, gamma)
-    elif model == 'least_square':
+    elif model == 'least squares':
         w, loss = least_square(ytrain, xtrain)
-    elif model == 'ridge_regression':
+    elif model == 'ridge regression':
         w, loss = ridge_regression(ytrain, xtrain, lambda_)
-    elif model == 'logistic_regression':
+    elif model == 'logistic regression':
         w, loss = logistic_regression(ytrain, xtrain, initial_w, max_iter, gamma)
-    elif model == 'reg_logistic_regression':
+    elif model == 'regularized logistic regression':
         w, loss = reg_logistic_regression(ytrain, xtrain, lambda_, initial_w, max_iter, gamma)
     else:
-        raise ValueError('Invalid error')
+        raise ValueError('Invalid model')
 
     ypred = predict_labels(w, xtest)
 
@@ -44,10 +43,10 @@ def cross_validation_demo(y, tx, model='ridge_regression', poly_degrees=[2], inv
     ws = []
 
     nb_grid = len(poly_degrees) * len(inv_log_degrees) * len(max_iters) * len(gammas) * len(lambdas)
-
+    
     for k in range(k_fold):
-        print('Fold number: {}'.format(k+1))
-
+        count = 1
+        
         test_indice = k_indice[k]
         train_indice = k_indice[~(np.arange(k_indice.shape[0]) == k)]
         train_indice = train_indice.reshape(-1)
@@ -86,6 +85,7 @@ def cross_validation_demo(y, tx, model='ridge_regression', poly_degrees=[2], inv
                 for max_iter in max_iters:
                     for gamma in gammas:
                         for lambda_ in lambdas:
+                            print(f'Fold number: {str(k+1)}  {int(count/nb_grid*100)}%  ', end='\r', flush=True)
                             initial_w = init_w(xtrain_process)
 
                             w, acc = cross_validation(ytrain, xtrain_process, ytest, xtest_process, initial_w, max_iter, gamma, lambda_, model)
@@ -96,12 +96,14 @@ def cross_validation_demo(y, tx, model='ridge_regression', poly_degrees=[2], inv
                                 'max_iteration': max_iter,
                                 'gamma': gamma,
                                 'lambda': lambda_,
-                                'weight': w,
+                                #'weight': w,
                                 'acc': acc
                             }
 
                             accs.append(cross)
                             ws.append(w)
+                            
+                            count += 1
     results = []
     for j in range(nb_grid):
         fold = [nb_grid * k + j for k in range(k_fold)]
@@ -113,11 +115,15 @@ def cross_validation_demo(y, tx, model='ridge_regression', poly_degrees=[2], inv
         param_dict = {k: v for (k, v) in results[grid][0].items() if (k not in ['acc', 'weights'])}
         acc_mean = np.array([item['acc'] for item in results[grid]]).mean(0)
         acc_std = np.array([item['acc'] for item in results[grid]]).std(0)
-        weight_mean = np.array([item['weight'] for item in results[grid]]).mean(0)
-        weight_std = np.array([item['weight'] for item in results[grid]]).std(0)
+        #weight_mean = np.array([item['weight'] for item in results[grid]]).mean(0)
+        #weight_std = np.array([item['weight'] for item in results[grid]]).std(0)
 
-        param_dict.update({'acc_mean': acc_mean, 'acc_std': acc_std, 'weight_mean': weight_mean, 'weight_std': weight_std})
+        param_dict.update({'acc_mean': acc_mean, 
+                           'acc_std': acc_std, 
+                           #'weight_mean': weight_mean, 
+                           #'weight_std': weight_std
+                          })
 
         grid_results.append(param_dict)
-
+    
     return grid_results
