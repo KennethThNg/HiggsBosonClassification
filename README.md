@@ -10,7 +10,8 @@ The content of this project is composed of different parts:
 - The folder ``report`` contains:
    - ``report.pdf``: report in PDF format.
    
-- The folder ``ML2019Project1`` containing the ``.py``files:
+- The folder ``ML2019Project1`` containing the python code:
+   - __``project1.ipynb``__ : notebook containing the procedure for the model selection.
    - __``preprocess.py``__: contains methods for preprocessing the data.
         -``standardize``: standardizes the data.
          
