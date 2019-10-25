@@ -8,7 +8,7 @@ The content of this project is composed of different parts:
    - ``sample-submission.csv``: format in which the predictions are presented.
    
 - The ``.py``files:
-   - ``__preprocess.py__``: contains methods for preprocessing the data.
+   - __``preprocess.py``__: contains methods for preprocessing the data.
          -``standardize``: standardizes the data.
          -``fit_standardize``: standardizes the data based on *given* mean and standard deviation. 
    
