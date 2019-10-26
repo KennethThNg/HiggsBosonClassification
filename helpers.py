@@ -46,7 +46,11 @@ def accuracy(y, x, w):
     return np.mean(y == predict_labels(w, x))
 
 def sigmoid(t):
-    return 1/(1+np.exp(-t))
+    """apply sigmoid function on t."""
+    s = 1 / (1 + np.exp(-t))
+    s[s < 1e-8] = 1e-8
+    s[s > 0.99999999] = 0.99999999
+    return s
 
 def compute_gradient_logistic(y, tx, w, lambda_=0):
     pred = sigmoid(tx.dot(w))
@@ -85,17 +89,17 @@ def accuracy_visualization_1(lambds, acc, param1='param1', title='Accuracy Plot'
     plt.ylabel("acc")
     plt.title(str(title))
     plt.grid(True)
-    plt.savefig(str(title) + '.png')
+    plt.savefig('plots/' + str(title) + '.png')
     plt.show()
     
 # visualized the matrice 'accs' on a grid made from vectors 'param1' and 'param2'
-def accuracy_visualization_2(param1, param2, accs, name1='param1', name2='param2', title='Accuracy Visualization'):
-    X, Y = np.meshgrid(param1, param2, sparse=True)
+def accuracy_visualization_2(param_x, param_y, accs, name_x='param1', name_y='param2', title='Accuracy Visualization'):
+    X, Y = np.meshgrid(param_x, param_y, sparse=True)
     fig, ax = plt.subplots( nrows=1, ncols=1 )
     c = ax.pcolor(X, Y, accs, cmap='RdBu', vmin=np.min(accs), vmax=np.max(accs))
     ax.set_title(str(title))
-    ax.set_xlabel(str(name1))
-    ax.set_ylabel(str(name2))
+    ax.set_xlabel(str(name_x))
+    ax.set_ylabel(str(name_y))
     fig.colorbar(c, ax=ax)
-    fig.savefig(str(title) + '.png')
+    fig.savefig('plots/' + str(title) + '.png')
     plt.show()
