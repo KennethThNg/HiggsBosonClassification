@@ -28,8 +28,8 @@ gammas = [0.001, 0.001, 0.001, 0.001]
 lambdas = [1e-12, 1e-12, 1e-12, 1e-12]
 
 # Masks creation
-tX = replaceNaNsWithMedian(tX_data)
-tX_test = replaceNaNsWithMedian(tX_test_data)
+tX = tX_data
+tX_test = tX_test_data
 mask = get_categorical_masks(tX)
 mask_test = get_categorical_masks(tX_test)
 y_pred = np.zeros(len(tX_test))
