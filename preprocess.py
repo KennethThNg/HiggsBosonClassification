@@ -35,3 +35,9 @@ def replaceNaNsWithMedian(tx):
         median = np.median(tx[:, i][tx[:, i] > -998.0])
         tx_replaced[:, i][tx[:, i] < -998.0] = median #and replace with column median
     return tx_replaced
+
+def replaceOutlierInColumn8(tx):
+    tx_replaced = tx
+    median = np.median(tx[:,8][tx[:,8] < 1500])
+    tx_replaced[:, 8][tx[:, 8] > 1500] = median
+    return tx_replaced

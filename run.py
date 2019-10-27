@@ -10,8 +10,8 @@ train_data_path = data_folder + 'train.csv'
 test_data_path = data_folder + 'test.csv'
 
 print('load data:')
-y, tX, ids = load_csv_data(train_data_path)
-_, tX_test, ids_test = load_csv_data(test_data_path)
+y_data, tX_data, ids = load_csv_data(train_data_path)
+_, tX_test_data, ids_test = load_csv_data(test_data_path)
 
 models = ['gd',
           'sgd',
@@ -22,13 +22,14 @@ selected_model = models[3]
 
 #Hyper parameters
 max_iters = 50
-gamma = 0.1
-poly_degree = 12
-inv_log_degree = 6
-gamma = 0.01
-lambda_ = 0.001
+poly_degrees = [10, 5, 10, 6]
+inv_log_degrees = [13, 19, 20, 15]
+gammas = [0.001, 0.001, 0.001, 0.001]
+lambdas = [1e-12, 1e-12, 1e-12, 1e-12]
 
 # Masks creation
+tX = tX_data
+tX_test = tX_test_data
 mask = get_categorical_masks(tX)
 mask_test = get_categorical_masks(tX_test)
 y_pred = np.zeros(len(tX_test))
@@ -39,7 +40,7 @@ for idx in mask:
 
     #training
     xtrain = tX[mask[idx]]
-    ytrain = y[mask[idx]]
+    ytrain = y_data[mask[idx]]
 
     xtrain_no_constant, col_to_remove = remove_constant_col(xtrain)
     xtrain_median = replaceNaNsWithMedian(xtrain_no_constant)
@@ -53,12 +54,12 @@ for idx in mask:
 
     print('Feature engineering for mask {}'.format(idx))
     #training
-    xtrain_poly_exp = degree_expansion(xtrain_centered, poly_degree)
-    xtrain_inv_log, val_col = invert_log(xtrain_no_constant, inv_log_degree)
+    xtrain_poly_exp = degree_expansion(xtrain_centered, poly_degrees[idx])
+    xtrain_inv_log, val_col = invert_log(xtrain_no_constant, inv_log_degrees[idx])
     inv_log_stand, mean_log, std_log = standardize(xtrain_inv_log[:, 1:])
     #test
-    xtest_poly_exp = degree_expansion(xtest_centered, poly_degree)
-    xtest_inv_log = fit_invert_log(xtest_no_constant, val_col, inv_log_degree)
+    xtest_poly_exp = degree_expansion(xtest_centered, poly_degrees[idx])
+    xtest_inv_log = fit_invert_log(xtest_no_constant, val_col, inv_log_degrees[idx])
     inv_log_stand_test = fit_standardize(xtest_inv_log[:, 1:], mean_log, std_log)
 
     print('Fit model for masks {}'.format(idx))
@@ -66,14 +67,14 @@ for idx in mask:
 
     if selected_model == 'gd':
         w_init = init_w(xtrain_process)
-        w, loss = least_square_GD(ytrain, xtrain_process, initial_w=w_init, max_iters=max_iters, gamma=gamma)
+        w, loss = least_square_GD(ytrain, xtrain_process, initial_w=w_init, max_iters=max_iters, gamma=gammas[idx])
     elif selected_model == 'sgd':
         w_init = init_w(xtrain_process)
-        w, loss = least_square_SGD(ytrain, xtrain_process, initial_w=w_init, max_iters=max_iters, gamma=gamma)
+        w, loss = least_square_SGD(ytrain, xtrain_process, initial_w=w_init, max_iters=max_iters, gamma=gammas[idx])
     elif selected_model == 'least squares':
         w, loss = least_square(ytrain, xtrain_process)
     elif selected_model == 'ridge regression':
-        w, loss = ridge_regression(ytrain, xtrain_process, lambda_)
+        w, loss = ridge_regression(ytrain, xtrain_process, lambdas[idx])
     else:
         raise ValueError('Invalid model key')
 
