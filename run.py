@@ -5,11 +5,11 @@ from preprocess import *
 from feature_engineer import *
 from implementation import *
 
-data_folder = '../data/'
+data_folder = 'data/'
 train_data_path = data_folder + 'train.csv'
 test_data_path = data_folder + 'test.csv'
 
-print('load data:')
+print('Loading data\r')
 y_data, tX_data, ids = load_csv_data(train_data_path)
 _, tX_test_data, ids_test = load_csv_data(test_data_path)
 
@@ -89,8 +89,11 @@ for idx in mask:
 
     print('------------------------------------------------------------------------------')
 
+print('Training complete')
 
-
-print('...Training complete')
+print('Writing submission\r')
+OUTPUT_PATH = 'submission.csv' # TODO: fill in desired name of output file for submission
+create_csv_submission(ids_test, y_pred, OUTPUT_PATH)
+print('Done! Have a nice day :)')
 
 
