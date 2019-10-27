@@ -59,7 +59,7 @@ for idx in mask:
     inv_log_stand, mean_log, std_log = standardize(xtrain_inv_log[:, 1:])
     #test
     xtest_poly_exp = degree_expansion(xtest_centered, poly_degrees[idx])
-    xtest_inv_log = fit_invert_log(xtest_no_constant, val_col, inv_log_degree[idx])
+    xtest_inv_log = fit_invert_log(xtest_no_constant, val_col, inv_log_degrees[idx])
     inv_log_stand_test = fit_standardize(xtest_inv_log[:, 1:], mean_log, std_log)
 
     print('Fit model for masks {}'.format(idx))
