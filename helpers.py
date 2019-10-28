@@ -62,6 +62,10 @@ def compute_logistic_loss(y, tx, w, lambda_=0):
     loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_+np.squeeze(w.T.dot(w))
     return loss
 
+def convert_y_to_log(y):
+    y[y == -1] = 0
+    return y
+
 # Find best model parameter
 def find_best_parameters(grid_results, min_ = False, item = 'acc_mean'):
     max = -10000
