@@ -54,6 +54,7 @@ def sigmoid(t):
     s[s > 0.99999999] = 0.99999999
     return s
 
+#Used by logistic regression only
 def compute_gradient_logistic(y_o, tx, w, lambda_=0):
     y = y_o.reshape((len(y_o),1))
     pred = sigmoid(tx.dot(w))
@@ -66,7 +67,12 @@ def compute_logistic_loss(y_o, tx, w, lambda_=0):
     loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_+np.squeeze(w.T.dot(w))
     return loss
 
-# Find best model parameter
+#Because logistic regression requires to be positive
+def convert_y_to_log(y):
+    y[y == -1] = 0
+    return y
+
+# Find best parameters in the given grid
 def find_best_parameters(grid_results, min_ = False, item = 'acc_mean'):
     max = -10000
     min = 10000

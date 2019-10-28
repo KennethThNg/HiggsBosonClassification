@@ -3,7 +3,7 @@ import numpy as np
 from proj_helpers import *
 from preprocess import *
 from feature_engineer import *
-from implementation import *
+from implementations import *
 
 data_folder = 'data/'
 train_data_path = data_folder + 'train.csv'
@@ -16,8 +16,11 @@ _, tX_test_data, ids_test = load_csv_data(test_data_path)
 models = ['gd',
           'sgd',
           'least squares',
-          'ridge regression']
+          'ridge regression',
+          'logistic regression',
+          'regularized logistic regression']
 
+#Chosing a model
 selected_model = models[3]
 
 #Hyper parameters
@@ -53,6 +56,7 @@ for idx in mask:
     xtest_centered = fit_standardize(xtest_median, mean, std)
 
     print('Feature engineering for mask {}'.format(idx))
+    
     #training
     xtrain_poly_exp = degree_expansion(xtrain_centered, poly_degrees[idx])
     xtrain_inv_log, val_col = invert_log(xtrain_no_constant, inv_log_degrees[idx])
@@ -75,16 +79,27 @@ for idx in mask:
         w, loss = least_square(ytrain, xtrain_process)
     elif selected_model == 'ridge regression':
         w, loss = ridge_regression(ytrain, xtrain_process, lambdas[idx])
+    elif selected_model == 'logistic regression':
+        w_init = init_w(xtrain_process)
+        ytrain = convert_y_to_log(ytrain)
+        w, loss = logistic_regression(ytrain, xtrain_process, initial_w=w_init, max_iters=max_iters, gamma=gammas[idx])
+        w = w.flatten()
+    elif selected_model == 'regularized logistic regression':
+        w_init = init_w(xtrain_process)
+        ytrain = convert_y_to_log(ytrain)
+        w, loss = reg_logistic_regression(ytrain, xtrain_process, lambda_ = lambdas[idx] , initial_w=w_init, max_iters=max_iters, gamma=gammas[idx])
+        w = w.flatten()
     else:
         raise ValueError('Invalid model key')
 
-    print('Minimal loss for masks {}: '.format(idx, loss))
+    print('Minimal loss for masks {}: {}'.format(idx, loss))
 
     print('Accuracy of masks {}: {}%'.format(idx, np.mean(ytrain == predict_labels(w, xtrain_process))*100))
 
     xtest_process = np.column_stack((xtest_poly_exp, xtest_inv_log, inv_log_stand_test))
     y_pred_temp = predict_labels(w, xtest_process)
 
+    #Add prediction of mask idx to all predictions
     y_pred[mask_test[idx]] = y_pred_temp
 
     print('------------------------------------------------------------------------------')

@@ -7,6 +7,7 @@ def standardize(x):
     std_data = centered_data/std
     return std_data, mean, std
 
+#Used to fit the test set with the computed mean and std
 def fit_standardize(x, mean_stand, std_stand):
     centered_data = (x - mean_stand)/std_stand
     return centered_data
@@ -21,6 +22,7 @@ def fit_remove_constant_col(x, const_col):#for the test part
     assert (x_process.std(0)==0).sum() == 0
     return x_process
 
+#Separate dataset according to categorical values found in the data
 def get_categorical_masks(x):
     return {
         0: (x[:,22] == 0),
@@ -29,6 +31,7 @@ def get_categorical_masks(x):
         3: (x[:,22] == 3)
     }
 
+#Here we call NaNs the values below -998 (to give ourselves a little bit of margin)
 def replaceNaNsWithMedian(tx):
     tx_replaced = tx
     for i in range(tx.shape[1]): #for each column compute median

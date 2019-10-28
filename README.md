@@ -1,6 +1,8 @@
 # CS-433 Machine Learning - Project 1
 This project for the Machine Learning course is about predicting from a data set whether a particle is a Higgs Boson based on thirty features.
 
+We assume that the files are executed in a environment with ``numpy`` installed
+
 The content of this project is composed of different parts:
 - The folder ``data`` contains the data for the project. It is composed of three files:
    - ``train.csv``: data set used for training the model.
@@ -55,6 +57,12 @@ The content of this project is composed of different parts:
         -``compute_gradient_logistic``: computes the gradient of the logistic loss.
         
         -``compute_logistic_loss``: computes the logistic regression loss.
+        
+        -``find_best_parameters``: extract the model's parameter with the best accuracy.
+        
+        -``accuracy_vizualization1``: visualized dependence of accuracy on the model's parameters.
+        
+        -``accuracy_vizualization2``: visualized the accuracy matrice on a grid made from couple of parameters.
          
    - __``implementations.py``__ : contains all regression models for the project.
         -``least_square_GD``: linear regression using gradient descent.
