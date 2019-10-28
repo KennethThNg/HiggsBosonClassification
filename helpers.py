@@ -54,12 +54,12 @@ def sigmoid(t):
 
 def compute_gradient_logistic(y, tx, w, lambda_=0):
     pred = sigmoid(tx.dot(w))
-    grad = tx.T.dot(pred - y) + 2*lambda_ * w
+    grad = tx.T.dot(pred - y) + lambda_ * w
     return grad
 
 def compute_logistic_loss(y, tx, w, lambda_=0):
     pred = sigmoid(tx.dot(w))
-    loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_+np.squeeze(w.T.dot(w))
+    loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_ * (w.T @ w) / 2
     return loss
 
 # Find best model parameter
