@@ -2,13 +2,11 @@ import numpy as np
 from proj_helpers import predict_labels
 import matplotlib.pyplot as plt
 
-def compute_loss(y_o, tx, w):
-    y = y_o.reshape((len(y_o), 1))
+def compute_loss(y, tx, w):
     e = y - tx.dot(w)
     return e.T.dot(e)/(2*len(e))
 
-def compute_gradient(y_o, tx, w):
-    y = y_o.reshape((len(y_o), 1))
+def compute_gradient(y, tx, w):
     e = y - tx.dot(w)
     grad = -tx.T.dot(e)/len(e)
     return grad
@@ -54,25 +52,17 @@ def sigmoid(t):
     s[s > 0.99999999] = 0.99999999
     return s
 
-#Used by logistic regression only
-def compute_gradient_logistic(y_o, tx, w, lambda_=0):
-    y = y_o.reshape((len(y_o),1))
+def compute_gradient_logistic(y, tx, w, lambda_=0):
     pred = sigmoid(tx.dot(w))
     grad = tx.T.dot(pred - y) + 2*lambda_ * w
     return grad
 
-def compute_logistic_loss(y_o, tx, w, lambda_=0):
-    y = y_o.reshape((len(y_o),1))
+def compute_logistic_loss(y, tx, w, lambda_=0):
     pred = sigmoid(tx.dot(w))
     loss = y.T.dot(np.log(pred)) - (1-y).T.dot(np.log(1 - pred)) + lambda_+np.squeeze(w.T.dot(w))
     return loss
 
-#Because logistic regression requires to be positive
-def convert_y_to_log(y):
-    y[y == -1] = 0
-    return y
-
-# Find best parameters in the given grid
+# Find best model parameter
 def find_best_parameters(grid_results, min_ = False, item = 'acc_mean'):
     max = -10000
     min = 10000
