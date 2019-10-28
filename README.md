@@ -60,7 +60,7 @@ The content of this project is composed of different parts:
         
         -``find_best_parameters``: extract the model's parameter with the best accuracy.
         
-        -``accuracy_vizualization1``:
+        -``accuracy_vizualization1``: visualized dependence of accuracy on lambda.
         
         -``accuracy_vizualization2``:
          
