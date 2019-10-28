@@ -57,6 +57,12 @@ The content of this project is composed of different parts:
         -``compute_gradient_logistic``: computes the gradient of the logistic loss.
         
         -``compute_logistic_loss``: computes the logistic regression loss.
+        
+        -``find_best_parameters``: extract the model's parameter with the best accuracy.
+        
+        -``accuracy_vizualization1``:
+        
+        -``accuracy_vizualization2``:
          
    - __``implementations.py``__ : contains all regression models for the project.
         -``least_square_GD``: linear regression using gradient descent.
