@@ -20,7 +20,7 @@ models = ['gd',
           'logistic regression',
           'regularized logistic regression']
 
-selected_model = models[4]
+selected_model = models[3]
 
 #Hyper parameters
 max_iters = 50
