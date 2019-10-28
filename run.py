@@ -107,7 +107,7 @@ for idx in mask:
 print('Training complete')
 
 print('Writing submission\r')
-OUTPUT_PATH = 'submission.csv' # TODO: fill in desired name of output file for submission
+OUTPUT_PATH = 'sample-submission.csv' # TODO: fill in desired name of output file for submission
 create_csv_submission(ids_test, y_pred, OUTPUT_PATH)
 print('Done! Have a nice day :)')
 
