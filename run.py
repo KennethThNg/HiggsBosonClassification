@@ -20,6 +20,7 @@ models = ['gd',
           'logistic regression',
           'regularized logistic regression']
 
+#Chosing a model
 selected_model = models[3]
 
 #Hyper parameters
@@ -55,6 +56,7 @@ for idx in mask:
     xtest_centered = fit_standardize(xtest_median, mean, std)
 
     print('Feature engineering for mask {}'.format(idx))
+    
     #training
     xtrain_poly_exp = degree_expansion(xtrain_centered, poly_degrees[idx])
     xtrain_inv_log, val_col = invert_log(xtrain_no_constant, inv_log_degrees[idx])
@@ -90,13 +92,14 @@ for idx in mask:
     else:
         raise ValueError('Invalid model key')
 
-    print('Minimal loss for masks {}: '.format(idx, loss))
+    print('Minimal loss for masks {}: {}'.format(idx, loss))
 
     print('Accuracy of masks {}: {}%'.format(idx, np.mean(ytrain == predict_labels(w, xtrain_process))*100))
 
     xtest_process = np.column_stack((xtest_poly_exp, xtest_inv_log, inv_log_stand_test))
     y_pred_temp = predict_labels(w, xtest_process)
 
+    #Add prediction of mask idx to all predictions
     y_pred[mask_test[idx]] = y_pred_temp
 
     print('------------------------------------------------------------------------------')
