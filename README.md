@@ -60,9 +60,9 @@ The content of this project is composed of different parts:
         
         -``find_best_parameters``: extract the model's parameter with the best accuracy.
         
-        -``accuracy_vizualization1``: visualized dependence of accuracy on lambda.
+        -``accuracy_vizualization1``: visualized dependence of accuracy on the model's parameters.
         
-        -``accuracy_vizualization2``:
+        -``accuracy_vizualization2``: visualized the accuracy matrice on a grid made from couple of parameters.
          
    - __``implementations.py``__ : contains all regression models for the project.
         -``least_square_GD``: linear regression using gradient descent.
